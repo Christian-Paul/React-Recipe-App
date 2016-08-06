@@ -6,7 +6,7 @@ import './style.sass';
 
 var Recipe = React.createClass({
 	getInitialState: function() {
-		return {editing: false};
+		return {editing: false, show: false};
 	},
 	edit: function() {
 		this.setState({editing: true});
@@ -21,10 +21,20 @@ var Recipe = React.createClass({
 	cancel: function() {
 		this.setState({editing: false});
 	},
+	toggleShowIngredients: function() {
+		this.setState({show: !this.state.show});
+	},
 	renderDefault: function() {
 		return (
 			<div className='recipe-container'>
-				<div className='recipe-name'>{this.props.children.name}</div>
+				<div onClick={this.toggleShowIngredients} className='recipe-name'>{this.props.children.name}</div>
+			</div>
+		);
+	},
+	renderDefaultShow: function() {
+		return (
+			<div className='recipe-container'>
+				<div onClick={this.toggleShowIngredients} className='recipe-name'>{this.props.children.name}</div>
 				<div>{this.props.children.ingredients}</div>
 				<button onClick={this.edit}>Edit</button>
 				<button onClick={this.remove}>Delete</button>
@@ -45,7 +55,11 @@ var Recipe = React.createClass({
 		if(this.state.editing) {
 			return this.renderEditing();
 		} else {
-			return this.renderDefault();
+			if(this.state.show) {
+				return this.renderDefaultShow();
+			} else {
+				return this.renderDefault();
+			}
 		}
 	}
 });
