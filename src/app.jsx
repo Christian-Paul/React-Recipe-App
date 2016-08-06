@@ -16,7 +16,7 @@ var Recipe = React.createClass({
 	},
 	save: function() {
 		this.setState({editing: false});
-		this.props.changeRecipe(this.refs.newText.value, this.props.index);
+		this.props.changeRecipe(this.refs.newText.value, this.refs.newIngredients.value, this.props.index);
 	},
 	cancel: function() {
 		this.setState({editing: false});
@@ -24,7 +24,8 @@ var Recipe = React.createClass({
 	renderDefault: function() {
 		return (
 			<div className='recipe-container'>
-				<div className='recipe-name'>{this.props.children}</div>
+				<div className='recipe-name'>{this.props.children.name}</div>
+				<div>{this.props.children.ingredients}</div>
 				<button onClick={this.edit}>Edit</button>
 				<button onClick={this.remove}>Delete</button>
 			</div>
@@ -33,7 +34,8 @@ var Recipe = React.createClass({
 	renderEditing: function() {
 		return (
 			<div className='recipe-container'>
-				<textarea ref='newText' defaultValue={this.props.children} className='edit-recipe-details'></textarea>
+				<textarea ref='newText' defaultValue={this.props.children.name} className='edit-recipe-details'></textarea>
+				<textarea ref='newIngredients' defaultValue={this.props.children.ingredients}></textarea>
 				<button onClick={this.save}>Save</button>
 				<button onClick={this.cancel}>Cancel</button>
 			</div>
@@ -50,8 +52,12 @@ var Recipe = React.createClass({
 
 var RecipeBoard = React.createClass({
 	getInitialState: function() {
+		localStorage.clear();
 		if(!localStorage.recipes) {
-			localStorage.recipes = JSON.stringify(['Macaroni Pie', 'Roti']);
+			localStorage.recipes = JSON.stringify([
+				{name: 'Macaroni Pie', ingredients: 'Macaroni'}, 
+				{name: 'Roti', ingredients: 'Flour'}
+				]);
 		}
 		var myRecipes = JSON.parse(localStorage.recipes);
 		return {
@@ -60,13 +66,13 @@ var RecipeBoard = React.createClass({
 	},
 	addRecipe: function() {
 		var tempRecipes = JSON.parse(localStorage.recipes);
-		tempRecipes.push('New Recipe!');
+		tempRecipes.push({name: 'Recipe Name', ingredients: 'Recipe Ingredients'});
 		this.setState({recipes: tempRecipes});
 		localStorage.recipes = JSON.stringify(tempRecipes);
 	},
-	changeRecipe: function(newRecipe, i) {
+	changeRecipe: function(newRecipe, newIngredients, i) {
 		var tempRecipes = JSON.parse(localStorage.recipes);
-		tempRecipes.splice(i, 1, newRecipe);
+		tempRecipes.splice(i, 1, {name: newRecipe, ingredients: newIngredients});
 		this.setState({recipes: tempRecipes});
 		localStorage.recipes = JSON.stringify(tempRecipes);
 	},
