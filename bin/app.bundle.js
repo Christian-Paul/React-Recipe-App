@@ -46,8 +46,6 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	__webpack_require__(1);
 
 	var _jquery = __webpack_require__(298);
@@ -66,36 +64,129 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var Recipe = _react2.default.createClass({
+		displayName: 'Recipe',
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+		getInitialState: function getInitialState() {
+			return { editing: false };
+		},
+		edit: function edit() {
+			this.setState({ editing: true });
+		},
+		remove: function remove() {
+			this.props.removeRecipe(this.props.index);
+		},
+		save: function save() {
+			this.setState({ editing: false });
+			this.props.changeRecipe(this.refs.newText.value, this.props.index);
+		},
+		cancel: function cancel() {
+			this.setState({ editing: false });
+		},
+		renderDefault: function renderDefault() {
+			return _react2.default.createElement(
+				'div',
+				{ className: 'recipe-container' },
+				_react2.default.createElement(
+					'div',
+					{ className: 'recipe-name' },
+					this.props.children
+				),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.edit },
+					'Edit'
+				),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.remove },
+					'Delete'
+				)
+			);
+		},
+		renderEditing: function renderEditing() {
+			return _react2.default.createElement(
+				'div',
+				{ className: 'recipe-container' },
+				_react2.default.createElement('textarea', { ref: 'newText', defaultValue: this.props.children, className: 'edit-recipe-details' }),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.save },
+					'Save'
+				),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.cancel },
+					'Cancel'
+				)
+			);
+		},
+		render: function render() {
+			if (this.state.editing) {
+				return this.renderEditing();
+			} else {
+				return this.renderDefault();
+			}
+		}
+	});
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	var RecipeBoard = _react2.default.createClass({
+		displayName: 'RecipeBoard',
 
-	var App = function (_React$Component) {
-	  _inherits(App, _React$Component);
+		getInitialState: function getInitialState() {
+			if (!localStorage.recipes) {
+				localStorage.recipes = JSON.stringify(['Macaroni Pie', 'Roti']);
+			}
+			var myRecipes = JSON.parse(localStorage.recipes);
+			return {
+				recipes: myRecipes
+			};
+		},
+		addRecipe: function addRecipe() {
+			var tempRecipes = JSON.parse(localStorage.recipes);
+			tempRecipes.push('New Recipe!');
+			this.setState({ recipes: tempRecipes });
+			localStorage.recipes = JSON.stringify(tempRecipes);
+		},
+		changeRecipe: function changeRecipe(newRecipe, i) {
+			var tempRecipes = JSON.parse(localStorage.recipes);
+			tempRecipes.splice(i, 1, newRecipe);
+			this.setState({ recipes: tempRecipes });
+			localStorage.recipes = JSON.stringify(tempRecipes);
+		},
+		removeRecipe: function removeRecipe(i) {
+			var tempRecipes = JSON.parse(localStorage.recipes);
+			tempRecipes.splice(i, 1);
+			this.setState({ recipes: tempRecipes });
+			localStorage.recipes = JSON.stringify(tempRecipes);
+		},
+		eachRecipe: function eachRecipe(item, i) {
+			return _react2.default.createElement(
+				Recipe,
+				{ key: i, index: i, changeRecipe: this.changeRecipe, removeRecipe: this.removeRecipe },
+				item
+			);
+		},
+		render: function render() {
+			return _react2.default.createElement(
+				'div',
+				{ className: 'recipe-board' },
+				_react2.default.createElement(
+					'h1',
+					null,
+					'My Recipes'
+				),
+				_react2.default.createElement(
+					'button',
+					{ onClick: this.addRecipe },
+					'Add Recipe'
+				),
+				this.state.recipes.map(this.eachRecipe)
+			);
+		}
+	});
 
-	  function App() {
-	    _classCallCheck(this, App);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-	  }
-
-	  _createClass(App, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        ' Hello React!'
-	      );
-	    }
-	  }]);
-
-	  return App;
-	}(_react2.default.Component);
-
-	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('main'));
+	_reactDom2.default.render(_react2.default.createElement(RecipeBoard, null), document.getElementById('main'));
 
 /***/ },
 /* 1 */
@@ -39533,7 +39624,7 @@
 
 
 	// module
-	exports.push([module.id, "html, body {\n  margin: 0;\n  padding: 0; }\n", ""]);
+	exports.push([module.id, "html, body {\n  margin: 0;\n  padding: 0;\n  font-family: 'Arial'; }\n", ""]);
 
 	// exports
 
