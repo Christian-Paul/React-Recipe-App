@@ -64,6 +64,22 @@ var Recipe = React.createClass({
 	}
 });
 
+var NewRecipe = React.createClass({
+	addRecipe: function() {
+		this.props.addRecipe(this.refs.newRecipeName.value, this.refs.newRecipeIngredients.value);
+	},
+	render: function() {
+		return (
+			<div>
+				<textarea ref='newRecipeName'></textarea>
+				<textarea ref='newRecipeIngredients'></textarea>
+				<button onClick={this.addRecipe}>Submit</button>
+				<button onClick={this.props.toggleAdding}>Cancel</button>
+			</div>
+		)
+	}
+});
+
 var RecipeBoard = React.createClass({
 	getInitialState: function() {
 		if(!localStorage.recipes) {
@@ -78,9 +94,9 @@ var RecipeBoard = React.createClass({
 			adding: false
 		}
 	},
-	addRecipe: function() {
+	addRecipe: function(recipeName, recipeIngredients) {
 		var tempRecipes = JSON.parse(localStorage.recipes);
-		tempRecipes.push({name: this.refs.newRecipeName.value || 'Recipe Name', ingredients: this.refs.newRecipeIngredients.value || 'Ingredients'});
+		tempRecipes.push({name: recipeName || 'Recipe Name', ingredients: recipeIngredients || 'Ingredients'});
 		this.setState({recipes: tempRecipes});
 		localStorage.recipes = JSON.stringify(tempRecipes);
 		this.toggleAdding();
@@ -105,20 +121,16 @@ var RecipeBoard = React.createClass({
 		);
 	},
 	toggleAdding: function() {
-		console.log(this.state.adding);
 		this.setState({adding: !this.state.adding});
 	},
 	renderAdding: function() {
 		return (
 			<div className='recipe-board'>
-				<textarea ref='newRecipeName'></textarea>
-				<textarea ref='newRecipeIngredients'></textarea>
-				<button onClick={this.addRecipe}>Submit</button>
-				<button onClick={this.toggleAdding}>Cancel</button>
 				<h1>My Recipes</h1>
 				{
 					this.state.recipes.map(this.eachRecipe)
 				}
+				<NewRecipe addRecipe={this.addRecipe} toggleAdding={this.toggleAdding} />
 			</div>
 		)
 	},
