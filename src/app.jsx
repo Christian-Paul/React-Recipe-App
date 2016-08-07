@@ -66,7 +66,6 @@ var Recipe = React.createClass({
 
 var RecipeBoard = React.createClass({
 	getInitialState: function() {
-		localStorage.clear();
 		if(!localStorage.recipes) {
 			localStorage.recipes = JSON.stringify([
 				{name: 'Macaroni Pie', ingredients: 'Macaroni'}, 
@@ -75,14 +74,16 @@ var RecipeBoard = React.createClass({
 		}
 		var myRecipes = JSON.parse(localStorage.recipes);
 		return {
-			recipes: myRecipes
+			recipes: myRecipes,
+			adding: false
 		}
 	},
 	addRecipe: function() {
 		var tempRecipes = JSON.parse(localStorage.recipes);
-		tempRecipes.push({name: 'Recipe Name', ingredients: 'Recipe Ingredients'});
+		tempRecipes.push({name: this.refs.newRecipeName.value || 'Recipe Name', ingredients: this.refs.newRecipeIngredients.value || 'Ingredients'});
 		this.setState({recipes: tempRecipes});
 		localStorage.recipes = JSON.stringify(tempRecipes);
+		this.toggleAdding();
 	},
 	changeRecipe: function(newRecipe, newIngredients, i) {
 		var tempRecipes = JSON.parse(localStorage.recipes);
@@ -103,16 +104,40 @@ var RecipeBoard = React.createClass({
 			</Recipe>
 		);
 	},
-	render: function() {
+	toggleAdding: function() {
+		this.setState({adding: !this.state.adding});
+	},
+	renderAdding: function() {
+		return (
+			<div className='recipe-board'>
+				<textarea ref='newRecipeName'></textarea>
+				<textarea ref='newRecipeIngredients'></textarea>
+				<button onClick={this.addRecipe}>Submit</button>
+				<button onClick={this.toggleAdding}>Cancel</button>
+				<h1>My Recipes</h1>
+				{
+					this.state.recipes.map(this.eachRecipe)
+				}
+			</div>
+		)
+	},
+	renderDefault: function() {
 		return (
 			<div className='recipe-board'>
 				<h1>My Recipes</h1>
-				<button onClick={this.addRecipe}>Add Recipe</button>
+				<button onClick={this.toggleAdding}>Add Recipe</button>
 				{
 					this.state.recipes.map(this.eachRecipe)
 				}
 			</div>
 		);
+	},
+	render: function() {
+		if(this.state.adding) {
+			return this.renderAdding();
+		} else {
+			return this.renderDefault();
+		}
 	}
 });
 
