@@ -1,4 +1,60 @@
 html, body
 	margin: 0
 	padding: 0
-	font-family: 'Arial'
+	font-family: 'Roboto', 'Arial'
+	background-color: #eee
+
+	#container
+		height: 100vh
+		width: 100vh
+		display: flex
+		justify-content: center
+
+		.recipe-board
+			width: 80vw
+			display: flex
+			flex-direction: column
+
+			.title-holder
+				display: flex
+				background-color: beige
+				justify-content: center
+
+				.board-title
+					font-size: 2em
+
+			.add-button
+				background-color: red
+				cursor: pointer
+				background-color: lightgreen
+				align-self: center
+				font-size: 1.2em
+				margin-top: 0.5em
+				padding: 0.4em 0.6em
+
+			.recipe-container
+				display: flex
+				flex-direction: column
+
+				.recipe-name
+					background-color: lightblue
+					cursor: pointer
+
+				.recipe-name:hover
+					text-decoration: underline
+			
+			.modal-container
+				width: 100vw
+				height: 100vh
+				z-index: 1
+				position: fixed
+				top: 0
+				left: 0
+				background-color: rgba(40, 40, 40, 0.8)
+				display: flex
+				justify-content: center
+				align-items: center
+
+				.modal-new-recipe
+					display: flex
+					flex-direction: column

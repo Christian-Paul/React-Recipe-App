@@ -44,7 +44,7 @@ var Recipe = React.createClass({
 	renderEditing: function() {
 		return (
 			<div className='recipe-container'>
-				<textarea ref='newText' defaultValue={this.props.children.name} className='edit-recipe-details'></textarea>
+				<input type='text' ref='newText' defaultValue={this.props.children.name} className='edit-recipe-details'></input>
 				<textarea ref='newIngredients' defaultValue={this.props.children.ingredients}></textarea>
 				<button onClick={this.save}>Save</button>
 				<button onClick={this.cancel}>Cancel</button>
@@ -70,11 +70,15 @@ var NewRecipe = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
-				<textarea ref='newRecipeName'></textarea>
-				<textarea ref='newRecipeIngredients'></textarea>
-				<button onClick={this.addRecipe}>Submit</button>
-				<button onClick={this.props.toggleAdding}>Cancel</button>
+			<div className='modal-container'>
+				<div className='modal-new-recipe'>
+					<label>Recipe Name:</label>
+					<input type='text' ref='newRecipeName'></input>
+					<label>Ingredients:</label>
+					<textarea ref='newRecipeIngredients'></textarea>
+					<button onClick={this.addRecipe}>Submit</button>
+					<button onClick={this.props.toggleAdding}>Cancel</button>
+				</div>
 			</div>
 		)
 	}
@@ -84,8 +88,8 @@ var RecipeBoard = React.createClass({
 	getInitialState: function() {
 		if(!localStorage.recipes) {
 			localStorage.recipes = JSON.stringify([
-				{name: 'Macaroni Pie', ingredients: 'Macaroni'}, 
-				{name: 'Roti', ingredients: 'Flour'}
+				{name: 'Apple Pie', ingredients: 'Apples, Flour, Water, Heat'}, 
+				{name: 'Beef Stew', ingredients: 'Beef, Carrots, Stock'}
 				]);
 		}
 		var myRecipes = JSON.parse(localStorage.recipes);
@@ -126,7 +130,7 @@ var RecipeBoard = React.createClass({
 	renderAdding: function() {
 		return (
 			<div className='recipe-board'>
-				<h1>My Recipes</h1>
+				<div className='board-title'>My Recipes</div>
 				{
 					this.state.recipes.map(this.eachRecipe)
 				}
@@ -137,11 +141,13 @@ var RecipeBoard = React.createClass({
 	renderDefault: function() {
 		return (
 			<div className='recipe-board'>
-				<h1>My Recipes</h1>
-				<button onClick={this.toggleAdding}>Add Recipe</button>
+				<div className='title-holder'>
+					<div className='board-title'>My Recipes</div>
+				</div>
 				{
 					this.state.recipes.map(this.eachRecipe)
 				}
+				<div className='add-button' onClick={this.toggleAdding}>Add Recipe</div>
 			</div>
 		);
 	},
@@ -154,4 +160,4 @@ var RecipeBoard = React.createClass({
 	}
 });
 
-ReactDOM.render(<RecipeBoard />, document.getElementById('main'));
+ReactDOM.render(<RecipeBoard />, document.getElementById('container'));
