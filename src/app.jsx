@@ -105,6 +105,7 @@ var RecipeBoard = React.createClass({
 		);
 	},
 	toggleAdding: function() {
+		console.log(this.state.adding);
 		this.setState({adding: !this.state.adding});
 	},
 	renderAdding: function() {
