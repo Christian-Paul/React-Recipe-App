@@ -2,7 +2,8 @@ import React from 'react';
 
 export const Recipe = React.createClass({
 	getInitialState: function() {
-		return {editing: false, show: false, name: '', ingredients: ''};
+		// name and ingredients initially set to props so that those same values are sent back if they're never changed
+		return {editing: false, show: false, name: this.props.children.name, ingredients: this.props.children.ingredients};
 	},
 	edit: function() {
 		this.setState({editing: true});
