@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Recipe = React.createClass({
 	getInitialState: function() {
-		return {editing: false, show: false};
+		return {editing: false, show: false, name: '', ingredients: ''};
 	},
 	edit: function() {
 		this.setState({editing: true});
@@ -12,13 +12,19 @@ export const Recipe = React.createClass({
 	},
 	save: function() {
 		this.setState({editing: false});
-		this.props.changeRecipe(this.refs.newText.value, this.refs.newIngredients.value, this.props.index);
+		this.props.changeRecipe(this.state.name, this.state.ingredients, this.props.index);
 	},
 	cancel: function() {
 		this.setState({editing: false});
 	},
 	toggleShowIngredients: function() {
 		this.setState({show: !this.state.show});
+	},
+	handleNameChange: function(e) {
+		this.setState({name: e.target.value});
+	},
+	handleIngredientsChange: function(e) {
+		this.setState({ingredients: e.target.value});
 	},
 	renderDefault: function() {
 		return (
@@ -40,8 +46,8 @@ export const Recipe = React.createClass({
 	renderEditing: function() {
 		return (
 			<div className='recipe-container'>
-				<input type='text' ref='newText' defaultValue={this.props.children.name} className='edit-recipe-details'></input>
-				<textarea ref='newIngredients' defaultValue={this.props.children.ingredients}></textarea>
+				<input type='text' onChange={this.handleNameChange} defaultValue={this.props.children.name} className='edit-recipe-details'></input>
+				<textarea onChange={this.handleIngredientsChange} defaultValue={this.props.children.ingredients}></textarea>
 				<button onClick={this.save}>Save</button>
 				<button onClick={this.cancel}>Cancel</button>
 			</div>
