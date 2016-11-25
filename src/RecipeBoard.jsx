@@ -48,7 +48,9 @@ export const RecipeBoard = React.createClass({
 	renderAdding: function() {
 		return (
 			<div className='recipe-board'>
-				<div className='board-title'>My Recipes</div>
+				<div className='title-holder'>
+					<h2 className='board-title'>My Recipes</h2>
+				</div>
 				{
 					this.state.recipes.map(this.eachRecipe)
 				}
@@ -60,7 +62,7 @@ export const RecipeBoard = React.createClass({
 		return (
 			<div className='recipe-board'>
 				<div className='title-holder'>
-					<div className='board-title'>My Recipes</div>
+					<h2 className='board-title'>My Recipes</h2>
 				</div>
 				{
 					this.state.recipes.map(this.eachRecipe)

@@ -21,8 +21,10 @@ export const NewRecipe = React.createClass({
 					<input type='text' onChange={this.handleNameChange}></input>
 					<label>Ingredients:</label>
 					<textarea onChange={this.handleIngredientsChange}></textarea>
-					<button onClick={this.addRecipe}>Submit</button>
-					<button onClick={this.props.toggleAdding}>Cancel</button>
+					<div className='buttons'>
+						<button className='submit-button' onClick={this.addRecipe}>Submit</button>
+						<button className='cancel-button' onClick={this.props.toggleAdding}>Cancel</button>
+					</div>
 				</div>
 			</div>
 		)

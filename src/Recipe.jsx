@@ -30,17 +30,19 @@ export const Recipe = React.createClass({
 	renderDefault: function() {
 		return (
 			<div className='recipe-container'>
-				<div onClick={this.toggleShowIngredients} className='recipe-name'>{this.props.children.name}</div>
+				<h3 onClick={this.toggleShowIngredients} className='recipe-name'>{this.props.children.name}</h3>
 			</div>
 		);
 	},
 	renderDefaultShow: function() {
 		return (
 			<div className='recipe-container'>
-				<div onClick={this.toggleShowIngredients} className='recipe-name'>{this.props.children.name}</div>
-				<div>{this.props.children.ingredients}</div>
-				<button onClick={this.edit}>Edit</button>
-				<button onClick={this.remove}>Delete</button>
+				<h3 onClick={this.toggleShowIngredients} className='recipe-name'>{this.props.children.name}</h3>
+				<div className='ingredients-holder'>{this.props.children.ingredients.split(', ').map( (item, i) => <div key = {i}>{item}</div> )}</div>
+				<div className='buttons'>
+					<button className='edit-button' onClick={this.edit}>Edit</button>
+					<button className='delete-button' onClick={this.remove}>Delete</button>
+				</div>
 			</div>
 		);
 	},
@@ -49,8 +51,10 @@ export const Recipe = React.createClass({
 			<div className='recipe-container'>
 				<input type='text' onChange={this.handleNameChange} defaultValue={this.props.children.name} className='edit-recipe-details'></input>
 				<textarea onChange={this.handleIngredientsChange} defaultValue={this.props.children.ingredients}></textarea>
-				<button onClick={this.save}>Save</button>
-				<button onClick={this.cancel}>Cancel</button>
+				<div className='buttons'>
+					<button className='save-button' onClick={this.save}>Save</button>
+					<button className='cancel-button' onClick={this.cancel}>Cancel</button>
+				</div>
 			</div>
 		);
 	},
